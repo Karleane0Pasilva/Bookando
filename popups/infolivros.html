@@ -1,0 +1,61 @@
+<div id="modalInfoLivro"
+     class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+
+  <div class="bg-white w-full max-w-5xl rounded-xl shadow-xl p-8 relative">
+
+    <!-- FECHAR -->
+    <button id="fecharInfoLivro"
+            class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl">
+      ×
+    </button>
+
+    <div class="flex gap-8">
+
+      <!-- COLUNA ESQUERDA -->
+      <div class="w-1/3 flex flex-col items-center">
+
+        <!-- CAPA -->
+        <div class="w-full aspect-[3/4] bg-gray-200 rounded overflow-hidden flex items-center justify-center mb-4">
+          <img id="infoCapa" src="" class="w-full h-full object-cover hidden">
+          <span id="infoCapaPlaceholder" class="text-gray-500">CAPA</span>
+        </div>
+
+      </div>
+
+      <!-- COLUNA DIREITA -->
+      <div class="w-2/3">
+
+        <!-- TÍTULO + AUTOR -->
+        <h2 id="infoTitulo" class="text-xl font-bold text-gray-900 mb-1">Título do Livro</h2>
+        <p id="infoAutor" class="text-sm text-gray-600 mb-4">Autor</p>
+
+        <!-- EDITORA (linha simples) -->
+        <p class="text-xs text-gray-500 font-semibold">Editora</p>
+        <p id="infoEditora" class="text-sm text-gray-800 mb-4">-</p>
+
+        <!-- LANÇAMENTO (linha simples) -->
+        <p class="text-xs text-gray-500 font-semibold">Lançamento</p>
+        <p id="infoLancamento" class="text-sm text-gray-800 mb-6">-</p>
+
+        <!-- DESCRIÇÃO -->
+        <p class="text-xs text-gray-500 font-semibold mb-1">Resumo do livro</p>
+        <div id="infoResumo"
+             class="h-64 overflow-y-auto bg-gray-100 border border-gray-200 rounded px-4 py-3 text-sm text-gray-700 leading-relaxed">
+        </div>
+
+        <!-- BOTÃO -->
+        <div class="flex justify-end gap-4 mt-6">
+
+          <button id="btnAvaliarLivro"
+                  class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold">
+            Avaliar
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
