@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto Avaliações</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- NAVBAR FIXA -->
+  <header class="bg-white shadow sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
+      <a href="index.html" class="font-semibold text-gray-800">PROJETO AVALIAÇÕES</a>
+      <nav class="space-x-6 text-gray-700 font-medium">
+        <a href="livros.html" class="hover:text-blue-600">LIVROS</a>
+        <a href="perfil.html" class="hover:text-blue-600">AVALIAÇÕES</a>
+        <a href="solicitacao.html" class="hover:text-blue-600">SOLICITAÇÕES</a>
+        <a href="login.html" class="text-red-600 font-semibold hover:text-red-700">SAIR</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="flex flex-col items-center justify-center text-center py-12 px-4">
+    
+    <!-- IMAGEM CENTRAL -->
+    <div class="bg-gray-300 w-80 h-48 rounded-md mb-8"></div>
+
+    <!-- TÍTULO -->
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">PROJETO AVALIAÇÕES</h1>
+    <p class="text-gray-600 mb-10">Faça review dos seus livros favoritos!</p>
+
+    <!-- BOTÕES -->
+    <div class="flex gap-4">
+      <a href="livros.html" 
+         class="bg-white border border-gray-300 px-5 py-2 shadow hover:bg-gray-100 transition">
+         CONFIRA OS LIVROS
+      </a>
+      <a href="perfil.html"
+         class="bg-white border border-gray-300 px-5 py-2 shadow hover:bg-gray-100 transition">
+         FAÇA UMA AVALIAÇÃO
+      </a>
+    </div>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="text-center text-sm text-gray-500 py-6 border-t mt-10">
+    © 2025 - Projeto Avaliações. Desenvolvido para fins acadêmicos.
+  </footer>
+
+  <!-- EXIBIR NOME DO USUÁRIO LOGADO -->
+  <script type="module">
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado'))
+    if (!usuario) {
+      // Se não estiver logado, redireciona para login
+      window.location.href = 'login.html'
+    } else {
+      console.log('Usuário logado:', usuario.nome)
+    }
+  </script>
+
+</body>
+</html>

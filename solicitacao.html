@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitar Livro</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <header class="bg-white shadow sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
+      <a href="index.html" class="font-semibold text-gray-800">PROJETO AVALIAÇÕES</a>
+      <nav class="space-x-6 text-gray-700 font-medium">
+        <a href="livros.html" class="hover:text-blue-600">LIVROS</a>
+        <a href="perfil.html" class="hover:text-blue-600">AVALIAÇÕES</a>
+        <a href="solicitacao.html" class="text-blue-600 font-semibold">SOLICITAÇÕES</a>
+        <a href="login.html" class="text-red-600 font-semibold hover:text-red-700">SAIR</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="flex-grow flex items-center justify-center px-6 py-10">
+    <div class="w-full max-w-lg bg-white rounded shadow p-6">
+      <h1 class="text-2xl font-bold mb-4">Solicitar Novo Livro</h1>
+      <p class="text-sm text-gray-600 mb-6">Preencha as informações abaixo para solicitar a adição de um livro ao catálogo.</p>
+
+      <form id="formSolicitacao" class="space-y-4">
+        <div>
+          <label for="titulo" class="block text-sm font-medium text-gray-700">Título do Livro</label>
+          <input id="titulo" name="titulo" type="text" required
+                 class="mt-1 w-full border rounded px-3 py-2 outline-none focus:ring"
+                 placeholder="Digite o nome completo do livro">
+        </div>
+
+        <div>
+          <label for="autor" class="block text-sm font-medium text-gray-700">Autor</label>
+          <input id="autor" name="autor" type="text"
+                 class="mt-1 w-full border rounded px-3 py-2 outline-none focus:ring"
+                 placeholder="Nome do autor (opcional)">
+        </div>
+
+        <div>
+          <label for="mensagem" class="block text-sm font-medium text-gray-700">Mensagem</label>
+          <textarea id="mensagem" name="mensagem" rows="3"
+                    class="mt-1 w-full border rounded px-3 py-2 outline-none focus:ring"
+                    placeholder="Alguma observação ou motivo da solicitação (opcional)"></textarea>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+          Enviar Solicitação
+        </button>
+
+        <p id="mensagemStatus" class="text-sm mt-2"></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="text-center text-sm text-gray-500 py-6 border-t mt-10">
+    © 2025 - Projeto Avaliações. Desenvolvido para fins acadêmicos.
+  </footer>
+
+  <!-- SCRIPT -->
+  <script type="module">
+    import { supabase } from './js/supabase.js'
+
+    const form = document.getElementById('formSolicitacao')
+    const msg = document.getElementById('mensagemStatus')
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado'))
+
+    if (!usuario) {
+      window.location.href = 'login.html'
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      msg.textContent = 'Enviando...'
+
+      const dados = {
+        usuario_id: usuario.id,
+        titulo_desejado: form.titulo.value.trim(),
+        autor_desejado: form.autor.value.trim(),
+        mensagem: form.mensagem.value.trim()
+      }
+
+      const { error } = await supabase.from('solicitacoes').insert([dados])
+
+      if (error) {
+        console.error('Erro ao enviar solicitação:', error)
+        msg.textContent = '❌ Erro ao enviar solicitação.'
+      } else {
+        msg.textContent = '✅ Solicitação enviada com sucesso!'
+        form.reset()
+      }
+    })
+  </script>
+
+</body>
+</html>

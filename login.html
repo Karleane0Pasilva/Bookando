@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+
+  <main class="w-full max-w-md bg-white rounded-md shadow p-6">
+    <h1 class="text-2xl font-bold mb-1">Login</h1>
+    <p class="text-sm text-gray-600 mb-6">Acesse sua conta para continuar.</p>
+
+    <form id="formLogin" class="space-y-4" novalidate>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+        <input id="email" name="email" type="email" required
+               class="mt-1 w-full border rounded px-3 py-2 outline-none focus:ring"
+               placeholder="voce@email.com">
+      </div>
+
+      <div>
+        <label for="senha" class="block text-sm font-medium text-gray-700">Senha</label>
+        <input id="senha" name="senha" type="password" required pattern="[0-9]{6,10}"
+               title="A senha deve conter apenas números, entre 6 e 10 dígitos."
+               class="mt-1 w-full border rounded px-3 py-2 outline-none focus:ring"
+               placeholder="123456">
+      </div>
+
+      <button type="submit"
+              class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        Entrar
+      </button>
+
+      <p id="mensagem" class="text-sm mt-2"></p>
+    </form>
+
+    <hr class="my-6">
+    <p class="text-sm text-gray-600">
+      Ainda não tem conta?
+      <a href="cadastro.html" class="text-blue-600 hover:underline">Cadastre-se</a>
+    </p>
+  </main>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { supabase } from './js/supabase.js'
+    import { handleLogin } from './js/auth.js'
+
+    const form = document.getElementById('formLogin')
+    const msg  = document.getElementById('mensagem')
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault()
+      const dados = {
+        email: form.email.value.trim(),
+        senha: form.senha.value
+      }
+      handleLogin(dados, msg)
+    })
+  </script>
+
+</body>
+</html>

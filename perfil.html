@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Perfil</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- CSS global -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Quill -->
+  <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+
+  <!-- Supabase -->
+  <script type="module" src="js/supabase.js"></script>
+
+  <style>
+    .ql-editor { font-family: inherit !important; font-size: .95rem; }
+
+    .foto-wrapper{ position:relative; width:140px; height:140px; margin-bottom:12px; }
+    .foto-wrapper img{
+      width:140px; height:140px; border-radius:50%; object-fit:cover;
+      border:2px solid #d1d5db; transition:filter .2s;
+    }
+    .foto-wrapper:hover img{ filter:brightness(85%); }
+    .foto-wrapper input[type="file"]{
+      position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer;
+    }
+    .camera-icon{
+      position:absolute; right:8px; bottom:8px; background:rgba(0,0,0,.6); color:#fff;
+      border-radius:9999px; padding:6px; font-size:16px; pointer-events:none;
+    }
+
+    #toolbar{ border:1px solid #d1d5db; border-bottom:none; border-radius:6px 6px 0 0; background:#f9fafb; }
+    #editor{ height:180px; border:1px solid #d1d5db; border-radius:0 0 6px 6px; background:#fff; }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <header class="bg-white shadow sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
+      <a href="index.html" class="font-semibold text-gray-800">PROJETO AVALIAÇÕES</a>
+      <nav class="space-x-6 text-gray-700 font-medium">
+        <a href="livros.html" class="hover:text-blue-600">LIVROS</a>
+        <a href="perfil.html" class="hover:text-blue-600">AVALIAÇÕES</a>
+        <a href="solicitacao.html" class="hover:text-blue-600">SOLICITAÇÕES</a>
+        <a href="login.html" class="text-red-600 font-semibold hover:text-red-700">SAIR</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="flex-grow flex items-center justify-center px-6 py-10">
+    <div class="w-full max-w-5xl bg-white rounded shadow p-6 flex gap-8">
+
+      <!-- COLUNA PERFIL -->
+      <div class="w-1/2 border-r pr-6 flex flex-col items-center">
+        <h2 class="text-xl font-semibold mb-4">Meu Perfil</h2>
+
+        <div class="foto-wrapper">
+          <img id="fotoPerfil" src="https://via.placeholder.com/140" alt="Foto de perfil">
+          <input id="inputFoto" type="file" accept="image/*">
+          <div class="camera-icon">📷</div>
+        </div>
+
+        <h3 id="nomeUsuario" class="text-lg font-semibold mb-4">Nome do Usuário</h3>
+
+        <div class="w-full">
+          <h3 class="font-semibold mb-1">Descrição</h3>
+          <div id="toolbar"></div>
+          <div id="editor"></div>
+        </div>
+
+        <div class="mt-4 flex flex-col items-center gap-3">
+          <button id="salvarDescricao"
+                  class="w-48 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition font-semibold text-sm">
+            Salvar Descrição
+          </button>
+
+          <button id="abrirAvaliacao"
+                  class="w-48 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition font-semibold text-sm">
+            FAÇA UMA AVALIAÇÃO
+          </button>
+        </div>
+
+        <p id="statusPerfil" class="text-sm text-gray-500 mt-3"></p>
+      </div>
+
+      <!-- MINHAS AVALIAÇÕES -->
+      <div class="w-1/2 text-center">
+        <h2 class="text-xl font-semibold mb-2">Minhas Avaliações</h2>
+        <div id="msgAvaliacao" class="text-gray-500"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="text-center text-sm text-gray-500 py-6 border-t mt-10">
+    © 2025 - Projeto Avaliações. Desenvolvido para fins acadêmicos.
+  </footer>
+
+  <!-- MODALS -->
+  <div id="modalContainer"></div>
+
+  <!-- TOAST -->
+  <div id="toast"
+      class="fixed bottom-6 right-6 bg-gray-900 text-white px-4 py-3 rounded-lg shadow-lg opacity-0 pointer-events-none transition-all duration-300">
+  </div>
+
+  <!-- MODAL CONFIRMAÇÃO -->
+  <div id="modalConfirmacao"
+      class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+
+    <div class="bg-white w-full max-w-sm rounded-xl shadow-xl p-6 text-center">
+
+      <h2 class="text-lg font-semibold text-gray-800 mb-2">Confirmar exclusão</h2>
+
+      <p class="text-gray-600 mb-6">Tem certeza que deseja excluir esta avaliação?</p>
+
+      <div class="flex justify-center gap-4">
+
+        <button id="btnCancelarExclusao"
+                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded">
+          Cancelar
+        </button>
+
+        <button id="btnConfirmarExclusao"
+                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">
+          Excluir
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script type="module">
+    import { supabase } from './js/supabase.js'
+    import { iniciarAvaliacaoModal } from './js/avaliacao.js'
+
+    // USUÁRIO
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado')) || { id: 1, nome: 'Karleane Pacheco' }
+    document.getElementById('nomeUsuario').textContent = usuario.nome
+
+    // QUILL PERFIL
+    const quill = new Quill('#editor', {
+      theme: 'snow',
+      placeholder: 'Escreva algo sobre você...',
+      modules: {
+        toolbar: [
+          [{ 'header': [1, 2, false] }],
+          [{ 'font': [] }],
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+          [{ 'align': [] }]
+        ]
+      }
+    })
+
+    // TOAST
+    function toast(msg) {
+      const t = document.getElementById('toast')
+      t.textContent = msg
+      t.classList.remove('opacity-0')
+      setTimeout(() => t.classList.add('opacity-0'), 1800)
+    }
+
+    // CARREGAR DESCRIÇÃO
+    async function carregarDescricao() {
+      const { data } = await supabase
+        .from('usuarios')
+        .select('descricao, foto_url')
+        .eq('id', usuario.id)
+        .single()
+
+      if (data?.descricao) quill.root.innerHTML = data.descricao
+      if (data?.foto_url) document.getElementById('fotoPerfil').src = data.foto_url
+    }
+    carregarDescricao()
+
+    // SALVAR DESCRIÇÃO
+    document.getElementById('salvarDescricao').addEventListener('click', async () => {
+      const descricao = quill.root.innerHTML.trim()
+
+      await supabase
+        .from('usuarios')
+        .update({ descricao })
+        .eq('id', usuario.id)
+
+      toast("Descrição salva.")
+    })
+
+    // ABRIR MODAL NOVA AVALIAÇÃO
+    document.getElementById('abrirAvaliacao').addEventListener('click', async () => {
+      const container = document.getElementById('modalContainer')
+      const html = await (await fetch('./popups/avaliacao.html')).text()
+      container.innerHTML = html
+      iniciarAvaliacaoModal({ afterSave: carregarAvaliacoes })
+    })
+
+    // CARREGAR AVALIAÇÕES
+    async function carregarAvaliacoes() {
+      const { data, error } = await supabase
+        .from('avaliacoes')
+        .select(`id, nota, descricao, data, livros(id, titulo, capa)`)
+        .eq('usuario_id', usuario.id)
+        .order('data', { ascending: false })
+
+      const container = document.querySelector('#msgAvaliacao')
+
+      if (error) {
+        container.textContent = 'Erro ao carregar avaliações.'
+        return
+      }
+
+      if (!data?.length) {
+        container.textContent = 'Nenhuma avaliação enviada ainda.'
+        return
+      }
+
+      container.innerHTML = ''
+
+      data.forEach(av => {
+        const card = document.createElement('div')
+        card.className = 'bg-white border rounded p-4 mb-4 shadow-sm text-left'
+
+        card.innerHTML = `
+          <div class="flex gap-4">
+
+            <img src="${av.livros.capa}"
+                 class="w-20 h-28 object-cover rounded border">
+
+            <div class="flex-1">
+
+              <p class="font-semibold text-gray-800 mb-1">${av.livros.titulo}</p>
+
+              <div class="text-yellow-400 text-lg mb-2">
+                ${'★'.repeat(av.nota)}${'☆'.repeat(5 - av.nota)}
+              </div>
+
+              <div class="text-gray-700 text-sm leading-relaxed">
+                ${av.descricao}
+              </div>
+
+              <p class="text-xs text-gray-400 mt-2">
+                ${new Date(av.data).toLocaleDateString('pt-BR')}
+              </p>
+
+              <div class="flex justify-end gap-4 mt-3">
+
+                <button class="text-blue-600 text-sm hover:underline"
+                        onclick="abrirEditarAvaliacao(${av.id})">
+                  Editar
+                </button>
+
+                <button class="text-red-600 text-sm hover:underline"
+                        onclick="confirmarExclusao(${av.id})">
+                  Excluir
+                </button>
+
+              </div>
+
+            </div>
+          </div>
+        `
+
+        container.appendChild(card)
+      })
+    }
+
+    carregarAvaliacoes()
+
+    window.carregarAvaliacoes = carregarAvaliacoes
+
+// ABRIR MODAL DE EDITAR AVALIAÇÃO
+window.abrirEditarAvaliacao = async function(id) {
+
+  const container = document.getElementById('modalContainer')
+
+  // carregar HTML
+  const resp = await fetch('./popups/editavaliacao.html')
+  container.innerHTML = await resp.text()
+
+  // mostrar modal
+  const modal = document.getElementById('modalEditarAvaliacao')
+  modal.classList.remove('hidden')
+
+  // carregar JS interno do modal
+  const modulo = await import('./js/editavaliacao.js')
+  modulo.iniciarEditarAvaliacao(id)
+}
+
+
+// MODAL DE CONFIRMAÇÃO
+let avaliacaoParaExcluir = null
+
+// abrir modal
+window.confirmarExclusao = function (id) {
+  avaliacaoParaExcluir = id
+  document.getElementById('modalConfirmacao').classList.remove('hidden')
+}
+
+// cancelar
+document.getElementById('btnCancelarExclusao').addEventListener('click', () => {
+  avaliacaoParaExcluir = null
+  document.getElementById('modalConfirmacao').classList.add('hidden')
+})
+
+// confirmar
+document.getElementById('btnConfirmarExclusao').addEventListener('click', async () => {
+
+  if (!avaliacaoParaExcluir) return
+
+  const { error } = await supabase
+    .from('avaliacoes')
+    .delete()
+    .eq('id', avaliacaoParaExcluir)
+
+  if (error) {
+    toast("Erro ao excluir.")
+  } else {
+    toast("Avaliação excluída.")
+    carregarAvaliacoes()
+  }
+
+  avaliacaoParaExcluir = null
+  document.getElementById('modalConfirmacao').classList.add('hidden')
+})
+
+// UPLOAD DE FOTO DE PERFIL
+const inputFoto = document.getElementById('inputFoto')
+const fotoPerfil = document.getElementById('fotoPerfil')
+
+inputFoto.addEventListener('change', async (e) => {
+  const arquivo = e.target.files[0]
+  if (!arquivo) return
+
+  const extensao = arquivo.name.split('.').pop()
+  const caminho = `usuario_${usuario.id}.${extensao}`
+
+  // Upload
+  const { error: uploadError } = await supabase
+    .storage
+    .from('foto-usuarios')
+    .upload(caminho, arquivo, {
+      upsert: true,        // permite substituir a antiga
+      contentType: arquivo.type
+    })
+
+  if (uploadError) {
+    console.error(uploadError)
+    toast('Erro ao enviar foto.')
+    return
+  }
+
+  // Pegar URL pública
+  const { data: urlData } = supabase
+    .storage
+    .from('foto-usuarios')
+    .getPublicUrl(caminho)
+
+  const fotoURL = urlData.publicUrl
+
+  // Salvar no usuário
+  const { error: updateError } = await supabase
+    .from('usuarios')
+    .update({ foto_url: fotoURL })
+    .eq('id', usuario.id)
+
+  if (updateError) {
+    console.error(updateError)
+    toast('Erro ao salvar foto.')
+    return
+  }
+
+  // Atualizar imagem no perfil
+  fotoPerfil.src = fotoURL
+
+  toast('Foto atualizada.')
+})
+
+  </script>
+
+</body>
+</html>
