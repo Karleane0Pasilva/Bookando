@@ -1,0 +1,71 @@
+<!-- MODAL EDITAR AVALIAÇÃO -->
+<div id="modalEditarAvaliacao"
+     class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+
+  <div class="bg-white w-full max-w-5xl rounded-xl shadow-xl p-8 relative">
+
+    <!-- FECHAR -->
+    <button id="fecharEditarAvaliacao"
+            class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl">
+      ×
+    </button>
+
+    <div class="flex gap-8">
+
+      <!-- COLUNA ESQUERDA (CAPA + TÍTULO DO LIVRO) -->
+      <div class="w-1/3 flex flex-col items-center">
+
+        <!-- CAPA -->
+        <div class="w-full aspect-[3/4] bg-gray-200 rounded overflow-hidden flex items-center justify-center mb-4">
+          <img id="capaLivroEdit" src="" class="w-full h-full object-cover">
+        </div>
+
+        <!-- TÍTULO -->
+        <div id="tituloLivroEdit"
+             class="w-full bg-gray-100 text-center py-2 rounded text-sm font-semibold text-gray-700">
+          TÍTULO DO LIVRO
+        </div>
+
+      </div>
+
+      <!-- COLUNA DIREITA -->
+      <div class="w-2/3 flex flex-col">
+
+        <!-- TÍTULO + ESTRELAS -->
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">EDITAR AVALIAÇÃO</h2>
+
+          <div id="estrelas-edit" class="flex gap-1 text-2xl text-gray-300 cursor-pointer">
+            <span data-valor="1">★</span>
+            <span data-valor="2">★</span>
+            <span data-valor="3">★</span>
+            <span data-valor="4">★</span>
+            <span data-valor="5">★</span>
+          </div>
+        </div>
+
+        <!-- QUILL -->
+        <div id="editor-edit" class="h-64 border border-gray-300 rounded bg-white mb-6"></div>
+
+        <!-- BOTÃO SALVAR -->
+        <div class="flex justify-end">
+          <button id="salvarEditBtn"
+            class="px-6 py-2.5 rounded-full 
+                  text-white font-medium text-sm
+                  bg-gradient-to-r from-[#3b82f6] to-[#60a5fa]
+                  shadow-[0_3px_8px_rgba(0,0,0,0.20)]
+                  hover:brightness-110 transition-all duration-200">
+            SALVAR
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+

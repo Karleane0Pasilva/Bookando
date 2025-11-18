@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bookando</title>
+  <link rel="icon" type="image/png" href="images/livroaba.png">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- NAVBAR FIXA -->
+  <header class="bg-white shadow sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
+      <a href="index.html" class="flex items-center"> 
+        <img src="images/nome.png" alt="Logo" class="h-10 w-auto">
+      </a>
+      <nav class="space-x-6 text-gray-700 font-medium">
+        <a href="livros.html" class="hover:text-blue-600">LIVROS</a>
+        <a href="perfil.html" class="hover:text-blue-600">AVALIAÇÕES</a>
+        <a href="solicitacao.html" class="hover:text-blue-600">SOLICITAÇÕES</a>
+        <a href="login.html" class="text-red-600 font-semibold hover:text-red-700">SAIR</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="relative text-center flex flex-col items-center">
+
+    <!-- BANNER -->
+    <div class="w-full">
+      <img src="images/Estampa.png" alt="Banner" class="w-full block">
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="flex gap-6 justify-center mt-6">
+
+      <!-- Botão 1 -->
+      <a href="livros.html">
+        <button
+          class="px-10 py-3 rounded-full text-white font-medium text-base
+                bg-gradient-to-r from-[#3b4a58] to-[#1f2937]
+                shadow-[0_3px_6px_rgba(0,0,0,0.25)]
+                hover:brightness-110 transition-all">
+          CONFIRA OS LIVROS
+        </button>
+      </a>
+
+      <!-- Botão 2 -->
+      <a href="perfil.html">
+        <button
+          class="px-10 py-3 rounded-full text-white font-medium text-base
+                bg-gradient-to-r from-[#3b4a58] to-[#1f2937]
+                shadow-[0_3px_6px_rgba(0,0,0,0.25)]
+                hover:brightness-110 transition-all">
+          FAÇA UMA AVALIAÇÃO
+        </button>
+      </a>
+
+    </div>
+
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="text-center text-sm text-gray-500 py-6 border-t mt-10">
+    © 2025 - Bookando. Desenvolvido para fins acadêmicos.
+  </footer>
+
+  <!-- EXIBIR NOME DO USUÁRIO LOGADO -->
+  <script type="module">
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado'))
+    if (!usuario) {
+      window.location.href = 'login.html'
+    } else {
+      console.log('Usuário logado:', usuario.nome)
+    }
+  </script>
+
+</body>
+</html>
+
