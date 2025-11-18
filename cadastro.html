@@ -10,7 +10,8 @@
   <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+<body class="min-h-screen bg-gray-100 flex items-center justify-center p-6"
+style="background-image: url('images/faixas.png');"></body>
 
   <main class="w-full max-w-md bg-white rounded-md shadow p-6">
     <h1 class="text-2xl font-bold mb-1">Cadastro</h1>
@@ -39,12 +40,10 @@
                placeholder="No minimo 6 digitos numericos">            
       </div>
 
-      <button type="submit" class="w-full">
-  <img src="img/entrar.png" 
-       alt="Criar conta"
-       class="w-full h-auto">
-</button>
-
+      <button type="submit"
+              class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        Criar conta
+      </button>
 
       <p id="mensagem" class="text-sm mt-2"></p>
     </form>
@@ -77,4 +76,3 @@
   </script>
 </body>
 </html>
-
